@@ -1,4 +1,4 @@
-package ie.atu.sw;
+package ie.atu.sw.utils;
 
 /*
  * ANSI escape sequences are a standard for controlling cursor location, colour, 
