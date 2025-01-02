@@ -1,8 +1,8 @@
 package ie.atu.sw.files;
 
 /**
- * The {@code OutputFile} class represents a file where processed data will be written.
- * This class extends {@code ProgramFile} and provides specific handling for output files.
+ * The {@code OutputFile} class represents a file where data will be outputted.
+ * This class extends {@code ProgramFile} and provides handling for output files.
  */
 public class OutputFile extends ProgramFile {
 
@@ -16,11 +16,9 @@ public class OutputFile extends ProgramFile {
     }
 
     /**
-     * Processes the output file. Currently, no specific processing is implemented for the output file.
-     * Override this method to add custom output file processing logic if needed.
+     * Processes the output file. None is needed for this file however.
      */
     @Override
     public void process() {
-        // Output file specific processing, if needed
     }
 }

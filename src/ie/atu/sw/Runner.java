@@ -9,7 +9,7 @@ import java.io.Console;
 import java.util.*;
 
 /**
- * The {@code Runner} class is the main entry point for the Virtual Threaded Text Simplifier application.
+ * The {@code Runner} class is the main class for the project.
  * It provides a menu-driven interface for specifying input files, processing data, and saving results.
  */
 public class Runner {
@@ -22,7 +22,7 @@ public class Runner {
 	/**
 	 * The main method that runs the application.
 	 *
-	 * @param args command-line arguments (not used).
+	 * @param args command-line arguments
 	 * @throws Exception if an error occurs during file processing.
 	 */
 	public static void main(String[] args) throws Exception {
@@ -86,28 +86,39 @@ public class Runner {
 		System.out.println("************************************************************");
 
 		if (embeddingsFile == null) {
-			System.out.println(ConsoleColour.RED_BOLD);
+			System.out.print(ConsoleColour.RED_BOLD);
 			System.out.println("(1) Specify Embeddings File");
+			System.out.print(ConsoleColour.RESET);
 		} else {
+			System.out.print(ConsoleColour.WHITE_BOLD);
 			System.out.println("(1) Specify Embeddings File");
+			System.out.print(ConsoleColour.RESET);
 		}
 
 		if (google1000File == null) {
-			System.out.println(ConsoleColour.RED_BOLD);
+			System.out.print(ConsoleColour.RED_BOLD);
 			System.out.println("(2) Specify Google 1000 File");
+			System.out.print(ConsoleColour.RESET);
 		} else {
+			System.out.print(ConsoleColour.WHITE_BOLD);
 			System.out.println("(2) Specify Google 1000 File");
+			System.out.print(ConsoleColour.RESET);
 		}
 
 		System.out.println("(3) Specify an Output File (default: " + outputFile.getFilePath() + ")");
+		System.out.print(ConsoleColour.RESET);
 
 		if (embeddingsFile == null || google1000File == null) {
-			System.out.println(ConsoleColour.RED_BOLD);
+			System.out.print(ConsoleColour.RED_BOLD);
 			System.out.println("(4) Execute and Save Results");
+			System.out.print(ConsoleColour.RESET);
 		} else {
+			System.out.print(ConsoleColour.WHITE_BOLD);
 			System.out.println("(4) Execute and Save Results");
+			System.out.print(ConsoleColour.RESET);
 		}
 
 		System.out.println("(?) Quit");
+		System.out.print(ConsoleColour.RESET);
 	}
 }

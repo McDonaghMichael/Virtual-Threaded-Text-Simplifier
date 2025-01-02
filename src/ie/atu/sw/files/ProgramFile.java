@@ -1,8 +1,7 @@
 package ie.atu.sw.files;
 
 /**
- * The {@code ProgramFile} abstract class serves as a base class for file handling in the system.
- * It provides a common structure and enforces the implementation of the {@code process} method for subclasses.
+ * The {@code ProgramFile} abstract class for file handling in the project.
  */
 abstract class ProgramFile {
 
@@ -21,7 +20,7 @@ abstract class ProgramFile {
     }
 
     /**
-     * Retrieves the file path.
+     * Returns the file path.
      *
      * @return the file path.
      */
@@ -39,7 +38,7 @@ abstract class ProgramFile {
     }
 
     /**
-     * Abstract method to process the file. Subclasses must provide an implementation.
+     * Abstract method to process the file.
      *
      * @throws Exception if an error occurs during processing.
      */
