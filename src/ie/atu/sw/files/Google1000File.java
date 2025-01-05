@@ -1,25 +1,29 @@
 package ie.atu.sw.files;
 
+import ie.atu.sw.Runner;
 import ie.atu.sw.utils.Methods;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.*;
-
-import static ie.atu.sw.utils.Methods.findBestSynonym;
 
 /**
  * The {@code Google1000File} class is a file containing a list of words.
- * It processes the file to find synonyms for each word using the embeddings file
- * and writes the results to the output file.
+ * It processes the file to find embeddings for each word and writes the results to the output file.
  */
 public class Google1000File extends ProgramFile {
 
     /**
-     * The embeddings file used to find synonyms.
+     * The embeddings file used to retrieve word vectors.
      */
     private EmbeddingsFile embeddingsFile;
+
+    /**
+     * Hashmap for storing the words from the google file and their vectors
+     */
+    private Map<String, double[]> wordEmbeddingsMap;
 
     /**
      * The output file where the results will be written.
@@ -29,8 +33,8 @@ public class Google1000File extends ProgramFile {
     /**
      * Constructs a {@code Google1000File} object with the file path, embeddings file, and output file.
      *
-     * @param filePath      the path to the Google 1000 file.
-     * @param embeddingsFile the embeddings file used for finding synonyms.
+     * @param filePath       the path to the Google 1000 file.
+     * @param embeddingsFile the embeddings file used for finding word vectors.
      * @param outputFile     the output file where the results will be saved.
      */
     public Google1000File(String filePath, EmbeddingsFile embeddingsFile, OutputFile outputFile) {
@@ -40,7 +44,7 @@ public class Google1000File extends ProgramFile {
     }
 
     /**
-     * Processes the Google 1000 file by finding the best synonym for each word
+     * Processes the Google 1000 file by loading words into a map, retrieving their embeddings,
      * and writing the results to the output file.
      *
      * @throws IOException           if an I/O error occurs while reading or writing files.
@@ -49,51 +53,37 @@ public class Google1000File extends ProgramFile {
     @Override
     public void process() throws IOException, InterruptedException {
 
-        // First thing we do is load in the BufferReader with the embeddings file and the BufferWriter
-        // for the output file
+        // Load all words and their embeddings into a map
+        wordEmbeddingsMap = new HashMap<>();
+
         try (BufferedReader br = new BufferedReader(new FileReader(filePath));
              BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile.getFilePath()))) {
 
-            // Now we will run each task in its own virtual thread using ExecutorService
-            ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
-
-            // Then we make a list to store Future objects that represent async task results
-            List<Future<String>> futures = new ArrayList<>();
             String word;
 
-            int index = 0;
-            int totalWords = 0;
-
-            // First we count the total number of words
+            // Read each word from the file and load its embedding
             while ((word = br.readLine()) != null) {
-                totalWords++;
-            }
+                word = word.trim();
+                double[] embedding = EmbeddingsFile.getEmbeddings().get(word);
 
-            // Then we reset the reader to start processing from the beginning
-            br.close();
-            try (BufferedReader br2 = new BufferedReader(new FileReader(filePath))) {
-                while ((word = br2.readLine()) != null) {
-                    String finalWord = word.trim();
-                    futures.add(executor.submit(() -> findBestSynonym(finalWord)));
-                    Methods.printProgress(++index, totalWords);
+                if (embedding != null) {
+                    wordEmbeddingsMap.put(word, embedding);
+                } else {
+                    if(Runner.isDebugging) {
+                        System.out.println("No embedding found for word: " + word);
+                    }
                 }
             }
 
-
-
-            // Write the results to the output file
-            for (Future<String> future : futures) {
-                bw.write(future.get() + " ");
-            }
-
-            // Now we can just terminate the executor
-            executor.shutdown();
-            if (!executor.awaitTermination(60, TimeUnit.SECONDS)) {
-                System.err.println("Executor did not terminate in time.");
-            }
             bw.flush();
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
         }
+    }
+
+    public Map<String,double[]> getWordEmbeddings() {
+        return wordEmbeddingsMap;
+    }
+
+    public void setWordEmbeddings(Map<String,double[]> wordEmbeddingsMap) {
+        this.wordEmbeddingsMap = wordEmbeddingsMap;
     }
 }

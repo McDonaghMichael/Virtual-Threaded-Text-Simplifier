@@ -80,6 +80,7 @@ public class EmbeddingsFile extends ProgramFile {
                 }));
             }
 
+            System.out.println("Embeddings loaded.");
 
             // Wait for all asynchronous tasks to complete
             for (Future<Void> future : futures) {
